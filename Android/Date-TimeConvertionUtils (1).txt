@@ -1,0 +1,41 @@
+    public String dateandTimeConversionFormat(String date, String serverTimeZone, String serVerTimeFormat, String requiredTimeFormat,String requiredTimeZone) {
+
+        String reqDate = "";
+        try {
+            TimeZone fromTZ = TimeZone.getTimeZone(serverTimeZone);
+            TimeZone toTZ = TimeZone.getTimeZone(requiredTimeZone);
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat(serVerTimeFormat);
+            Date dateObject = null;
+            try {
+                dateObject = inputFormat.parse(String.valueOf(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar changedDate = changeTimezoneOfDate(dateObject, fromTZ, toTZ);
+
+            SimpleDateFormat outputFormat = new SimpleDateFormat(requiredTimeFormat);
+            outputFormat.setTimeZone(toTZ);
+            reqDate = outputFormat.format(changedDate.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            reqDate = "";
+        }
+
+        return reqDate;
+    }
+
+
+    private Calendar changeTimezoneOfDate(Date date, TimeZone fromTZ, TimeZone toTZ) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        long millis = calendar.getTimeInMillis();
+        long fromOffset = fromTZ.getOffset(millis);
+        long toOffset = toTZ.getOffset(millis);
+        long convertedTime = millis - (fromOffset - toOffset);
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(convertedTime);
+        Log.v("local time", "" + convertedTime);
+        return c;
+    }
