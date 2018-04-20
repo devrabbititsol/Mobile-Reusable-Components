@@ -12,9 +12,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Time::",TimeZoneConversitions.convertToUserTimeZone(withDate: "2018/03/12 23:45:02", withActualFormateFormate: "yyyy/MM/dd HH:mm:ss", withRequiredFormate: "MMM dd,yyyy hh:mm a", sourceTimeZone:"PST", destinationTimeZone:"IST"))
-        
-        
+    print("Time::",TimeZoneConversitions.convertToUserTimeZone(withDate: "2018/03/12 22:45:02", withActualFormateFormate: "yyyy/MM/dd HH:mm:ss", withRequiredFormate: "MMM dd,yyyy hh:mm a", sourceTimeZone:"PST", destinationTimeZone:"IST"))
         
         // Do any additional setup after loading the view, typically from a nib.
     }

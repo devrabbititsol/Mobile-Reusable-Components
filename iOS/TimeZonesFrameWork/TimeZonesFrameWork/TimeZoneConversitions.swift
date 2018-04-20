@@ -12,32 +12,23 @@ class TimeZoneConversitions: NSObject {
 
     static func convertToUserTimeZone(withDate:String,withActualFormateFormate:String,withRequiredFormate:String,sourceTimeZone:String,destinationTimeZone:String) -> String {
         if(withDate != ""){
-            // setActualDateFormate
             
     let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier:"en_US_POSIX") as Locale!
+            dateFormatter.locale = Locale(identifier:"en_US_POSIX") as Locale?
     dateFormatter.dateFormat = withActualFormateFormate
-let dateFromString: Date? = dateFormatter.date(from: withDate)
-    
-        
-let sourceDate: Date? = dateFromString
-let sourceTimeZone = NSTimeZone(abbreviation: sourceTimeZone)
-        let destinationTimeZone = NSTimeZone(abbreviation: destinationTimeZone)
-        let sourceGMTOffset: Int? = sourceTimeZone?.secondsFromGMT(for: sourceDate!)
-            let destinationGMTOffset: Int? = destinationTimeZone?.secondsFromGMT(for: sourceDate!)
-            let interval = Double(destinationGMTOffset! - sourceGMTOffset!)
-            let destinationDate = Date(timeInterval: interval, since: sourceDate!)
-        
-    dateFormatter.dateFormat = withRequiredFormate
-        
-    var retunDate : String =  dateFormatter.string(from: destinationDate)
+    dateFormatter.timeZone = TimeZone.init(abbreviation: sourceTimeZone)
+let sourceDate: Date? = dateFormatter.date(from: withDate)
+    dateFormatter.timeZone = TimeZone.init(abbreviation: destinationTimeZone)
+    dateFormatter.dateFormat = withRequiredFormate;
+    var retunDate : String =  dateFormatter.string(from: sourceDate!)
+    let destinationDate = dateFormatter.date(from: retunDate)
             
             //// ****** check device fromate
             let formatter = DateFormatter()
             formatter.locale = NSLocale.current
             formatter.dateStyle = .none
             formatter.timeStyle = .short
-            let dateString: String = formatter.string(from: destinationDate)
+            let dateString: String = formatter.string(from: destinationDate!)
             let amRange: NSRange? = (dateString as NSString).range(of: formatter.amSymbol)
             let pmRange: NSRange? = (dateString as NSString).range(of: formatter.pmSymbol)
             let is24h: Bool = amRange?.location == NSNotFound && pmRange?.location == NSNotFound
@@ -50,7 +41,7 @@ let sourceTimeZone = NSTimeZone(abbreviation: sourceTimeZone)
                     formatter.locale = aLocale as Locale
                 }
                 formatter.dateFormat = withRequiredFormate
-                retunDate = formatter.string(from: destinationDate)
+                retunDate = formatter.string(from: destinationDate!)
             }
             return retunDate;
             
